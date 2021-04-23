@@ -1,21 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <WebcamVideo/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import WebcamVideo from './components/WebcamVideo.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    WebcamVideo
   }
 });
 </script>
 
 <style lang="scss">
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
