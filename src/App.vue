@@ -1,15 +1,18 @@
 <template>
-  <WebcamVideo/>
+  <!--  <WebcamVideo/>-->
+  <Meteo meteo-class="storm"/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import WebcamVideo from './components/WebcamVideo.vue';
+// import WebcamVideo from './components/WebcamVideo.vue';
+import Meteo from './components/meteo/Meteo.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    WebcamVideo
+    // WebcamVideo,
+    Meteo
   }
 });
 </script>
@@ -18,14 +21,12 @@ export default defineComponent({
 html, body {
   margin: 0;
   padding: 0;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>
