@@ -23,35 +23,32 @@ import {
   WithFaceExpressions,
   WithFaceDetection, detectSingleFace, WithFaceDescriptor, FaceDetection, WithFaceLandmarks, FaceLandmarks68
 } from 'face-api.js';
-
+import { combineLatest, fromEvent, interval, merge } from 'rxjs';
+import { concatMap, distinctUntilChanged, map, withLatestFrom } from 'rxjs/operators';
 
 export default defineComponent({
   name: 'WebcamVideo',
   mounted: async function() {
-    await FaceApiService.init();
     const videoRef = this.$refs.video as HTMLVideoElement;
     const canvasRef = this.$refs.canvas as HTMLCanvasElement;
+    await FaceApiService.init();
     videoRef.srcObject = await FaceApiService.getVideo();
-    videoRef.addEventListener('play', function() {
-      const interval = setInterval(async function() {
-        const detection = await detectSingleFace(videoRef, new TinyFaceDetectorOptions())
-            .withFaceLandmarks()
-            .withFaceExpressions()
-            .withFaceDescriptor();
-        console.log(detection);
-        if(detection) manageExpressions(detection);
+    const video$ = fromEvent(videoRef, 'play');
+    const refreshTime = 100;
+    const refreshTimer$ = interval(refreshTime);
+    const expressionDetection$ = combineLatest(refreshTimer$, video$).pipe(
+        concatMap(([time, video]) =>
+            manageVideo(videoRef, canvasRef)
+        ),
+        distinctUntilChanged()
+    );
 
-        if(detection) {
-          clearCanvas(canvasRef);
-          draw.drawDetections(canvasRef, detection);
-          //clearInterval(interval);
-        }
-      }, 250);
-    });
+    expressionDetection$.pipe(
+        map(detection => detection ? manageExpressions(detection) : null)
+    ).subscribe(console.log);
   },
   methods: {}
 });
-
 
 
 const clearCanvas = (canvas: HTMLCanvasElement) => {
@@ -73,6 +70,22 @@ const manageExpressions = (detection: WithFaceDescriptor<WithFaceExpressions<Wit
   //  debugger;
   //  return { key, value };
   //}, { key: undefined, value: 0 } as { key: string | undefined, value: number });
+};
+
+const manageVideo = async (videoRef: HTMLVideoElement, canvasRef: HTMLCanvasElement) => {
+  const detection = await detectSingleFace(videoRef, new TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceExpressions()
+      .withFaceDescriptor();
+
+  if(detection) manageExpressions(detection);
+
+  if(detection) {
+    clearCanvas(canvasRef);
+    draw.drawDetections(canvasRef, detection);
+    //clearInterval(interval);
+  }
+  return detection;
 };
 </script>
 
