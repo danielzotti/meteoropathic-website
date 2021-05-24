@@ -71,7 +71,7 @@ export default defineComponent({
     stop: async function() {
       console.log('stop');
       const videoRef = this.$refs.video as HTMLVideoElement;
-      const stream = await FaceApiService.getVideo();
+      //const stream = await FaceApiService.getVideo();
       //stream?.getTracks()[0];
       videoRef.srcObject = null;
     },
@@ -100,41 +100,16 @@ export default defineComponent({
       if(detection) {
         draw.drawDetections(canvasRef, detection);
       }
+    },
+    expressionChanged(expression: string) {
+      this.$emit('expressionChanged', { expression })
     }
   },
-  data: () => ({
-    isPlay: true
-  })
+  data: function() {
+    return {};
+  },
+  emits: ['expressionChanged']
 });
-
-
-// const clearCanvas = (canvas: HTMLCanvasElement) => {
-//   const context = canvas.getContext('2d');
-//   context?.clearRect(0, 0, canvas.width, canvas.height);
-// };
-//
-// const getExpressionName = (detection: DetectionResult) => {
-//   if(!detection?.expressions) {
-//     return null;
-//   }
-//   const res = Object.entries(detection.expressions).reduce((max, [key, value]) => {
-//     return value > max.value ? { key, value } : max;
-//   }, { key: 'neutral', value: 0 });
-//   return res.key;
-// };
-//
-// const detectFace = async (videoRef: HTMLVideoElement) => await detectSingleFace(videoRef, new TinyFaceDetectorOptions())
-//     .withFaceLandmarks()
-//     .withFaceExpressions()
-//     .withFaceDescriptor();
-//
-// const printLandmarks = async (detection: DetectionResult, canvasRef: HTMLCanvasElement) => {
-//   // console.log(detection?.expressions)
-//   clearCanvas(canvasRef);
-//   if(detection) {
-//     draw.drawDetections(canvasRef, detection);
-//   }
-// };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
