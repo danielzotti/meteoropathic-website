@@ -1,17 +1,17 @@
 <template>
-  <!--  <WebcamVideo/>-->
+  <WebcamVideo/>
   <Meteo meteo-class="storm"/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-// import WebcamVideo from './components/WebcamVideo.vue';
+import WebcamVideo from './components/WebcamVideo.vue';
 import Meteo from './components/meteo/Meteo.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    // WebcamVideo,
+    WebcamVideo,
     Meteo
   }
 });
