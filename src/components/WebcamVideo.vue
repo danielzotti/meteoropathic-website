@@ -25,8 +25,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { draw } from 'face-api.js';
-import FaceApiService, { DetectionResult, FaceExpression } from '@/services/FaceApiService';
-import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import FaceApiService from '@/services/FaceApiService';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { interval, of } from 'rxjs';
+import { DetectionResult, FaceExpression } from '@/models/face-api.models';
 
 
 export default defineComponent({
@@ -75,7 +77,16 @@ export default defineComponent({
       const expressionDetection$ = FaceApiService.getExpressionDetection({ videoRef, refreshMs });
 
       // Print on canvas
-      expressionDetection$.pipe(tap(detection => this.printLandmarks(detection, canvasRef))).subscribe();
+      // interval(1000).pipe(
+      //     withLatestFrom(expressionDetection$),
+      //     switchMap( ([, detection]) => of(detection)),
+      //     tap(r => console.warn({1: r})),
+      //     tap(detection => this.printLandmarks(detection, canvasRef))
+      // ).subscribe();
+
+      expressionDetection$.pipe(
+          tap(detection => this.printLandmarks(detection, canvasRef))
+      ).subscribe()
 
       // Manage expression
       expressionDetection$.pipe(
@@ -94,7 +105,7 @@ export default defineComponent({
     },
     clearCanvas: function() {
       const canvas = this.$refs.canvas as HTMLCanvasElement;
-      const context = canvas?.getContext('2d');
+      const context = canvas.getContext('2d');
       context?.clearRect(0, 0, canvas.width, canvas.height);
     },
     printLandmarks: async function(detection: DetectionResult, canvasRef: HTMLCanvasElement) {

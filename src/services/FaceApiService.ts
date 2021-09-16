@@ -1,21 +1,15 @@
 import {
-  detectSingleFace, FaceDetection,
+  detectSingleFace,
   loadFaceExpressionModel,
   loadFaceLandmarkModel,
   loadFaceRecognitionModel,
   loadSsdMobilenetv1Model,
-  loadTinyFaceDetectorModel, TinyFaceDetectorOptions, WithFaceDescriptor, WithFaceExpressions, WithFaceLandmarks
+  loadTinyFaceDetectorModel,
+  TinyFaceDetectorOptions,
 } from 'face-api.js';
 import { combineLatest, fromEvent, interval, Observable } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
-
-
-export type DetectionResult =
-  WithFaceDescriptor<WithFaceExpressions<WithFaceLandmarks<{ detection: FaceDetection; }>>>
-  | undefined;
-
-
-export type FaceExpression = 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'disgusted' | 'surprised' | null;
+import { DetectionResult, FaceExpression } from '@/models/face-api.models';
 
 export default class FaceApiService {
 

@@ -11,15 +11,16 @@
 <script lang="ts">
 // import Cloud from './Cloud.vue';
 
-export type MeteoClass = 'variable' | 'sun' | 'cloudy' | 'rain' | 'storm';
+import { defineComponent } from 'vue';
+import { MeteoClass } from '@/models/meteo.models';
 
-export default {
+export default defineComponent({
   name: 'Meteo',
   // components: { Cloud },
   props: {
-    meteoClass: String
+    meteoClass: String as MeteoClass
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -35,11 +36,8 @@ export default {
 
   h1 {
     text-align: center;
+    text-transform: uppercase;
     margin: 0;
-  }
-
-  &.variable {
-    background-color: white;
   }
 
   &.sun {

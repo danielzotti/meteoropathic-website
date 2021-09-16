@@ -1,13 +1,15 @@
 <template>
   <WebcamVideo @expressionChanged="onFaceExpressionChange"/>
   <Meteo :meteo-class="meteoClass"/>
+  <div class="expression">{{ expression }}</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import WebcamVideo from './components/WebcamVideo.vue';
 import Meteo from './components/meteo/Meteo.vue';
-import { FaceExpression } from '@/services/FaceApiService';
+import { MeteoClass } from '@/models/meteo.models';
+import { FaceExpression } from '@/models/face-api.models';
 
 export default defineComponent({
   name: 'App',
@@ -17,11 +19,13 @@ export default defineComponent({
   },
   data() {
     return {
-      meteoClass: 'variable'
+      meteoClass: 'cloudy' as MeteoClass,
+      expression: 'neutral' as FaceExpression,
     };
   },
   methods: {
     onFaceExpressionChange(expression: FaceExpression) {
+      this.expression = expression;
       console.debug({ expressionInApp: expression });
       switch(expression) {
         case 'happy':
@@ -34,7 +38,7 @@ export default defineComponent({
           this.meteoClass = 'rain';
           break;
         default:
-          this.meteoClass = 'variable';
+          this.meteoClass = 'cloudy';
       }
     }
   },
@@ -54,7 +58,17 @@ html, body {
   right: 0;
   bottom: 0;
 }
+
 *, *:before, *:after {
   box-sizing: border-box;
+}
+
+.expression {
+  font-weight: bold;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 20px;
+  text-transform: uppercase;
 }
 </style>
