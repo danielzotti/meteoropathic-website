@@ -1,5 +1,5 @@
 import {
-  detectSingleFace, DetectSingleFaceTask, FaceDetection, FaceLandmarks68,
+  detectSingleFace, FaceDetection,
   loadFaceExpressionModel,
   loadFaceLandmarkModel,
   loadFaceRecognitionModel,
