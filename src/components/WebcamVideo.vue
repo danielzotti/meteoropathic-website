@@ -12,8 +12,9 @@
             height="560"></canvas>
 
     <div class="buttons">
-      <button ref="stop" @click="stop">Stop</button>
-      <button ref="play" @click="play">Play</button>
+      <button @click="stop">Stop</button>
+      <button @click="play">Play</button>
+      <button @click="clearCanvas">Clear canvas</button>
     </div>
   </div>
 
@@ -21,55 +22,49 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import FaceApiService from '@/services/FaceApiService';
+import FaceApiService, { DetectionResult, FaceExpression } from '@/services/FaceApiService';
 import {
-  TinyFaceDetectorOptions,
-  draw,
-  WithFaceExpressions, detectSingleFace, WithFaceDescriptor, FaceDetection, WithFaceLandmarks
+  draw, FaceExpressions,
 } from 'face-api.js';
-import { combineLatest, fromEvent, interval } from 'rxjs';
-import { concatMap, debounceTime, distinctUntilChanged, exhaustMap, filter, map, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
 
-export type DetectionResult =
-    WithFaceDescriptor<WithFaceExpressions<WithFaceLandmarks<{ detection: FaceDetection; }>>>
-    | undefined
 
 export default defineComponent({
   name: 'WebcamVideo',
   mounted: async function() {
-    await this.play();
+    console.debug('Starting webcam...');
+    // await this.play();
+    console.debug('Webcam started');
   },
   methods: {
     play: async function() {
+      console.debug('Start playing...');
       const videoRef = this.$refs.video as HTMLVideoElement;
       const canvasRef = this.$refs.canvas as HTMLCanvasElement;
       await FaceApiService.init();
 
       videoRef.srcObject = await FaceApiService.getVideo();
 
-      const video$ = fromEvent(videoRef, 'play');
-      const refreshTime = 100;
-      const refreshTimer$ = interval(refreshTime);
+      const refreshMs = 100;
+      const debounceMs = 1000;
 
       // Try to detect expression every tot time
-      const expressionDetection$ = combineLatest([refreshTimer$, video$]).pipe(
-          concatMap(([time, video]) => this.detectFace(videoRef)),
-          // tap(console.log),
-          filter(i => i !== undefined && i !== null)
-      );
+      const expressionDetection$ = FaceApiService.getExpressionDetection({ videoRef, refreshMs });
 
       // Print on canvas
       expressionDetection$.pipe(tap(detection => this.printLandmarks(detection, canvasRef))).subscribe();
 
       // Manage expression
       expressionDetection$.pipe(
-          map(detection => detection ? this.getExpressionName(detection) : null),
+          map(detection => detection ? FaceApiService.getExpressionName(detection) : null),
           distinctUntilChanged(),
-          debounceTime(3000),
-      ).subscribe(console.log);
+          debounceTime(debounceMs),
+          tap(expression => console.debug({ expression }))
+      ).subscribe(expression => this.expressionChanged(expression));
+      console.debug('Started');
     },
     stop: async function() {
-      console.log('stop');
+      console.debug('stop');
       const videoRef = this.$refs.video as HTMLVideoElement;
       //const stream = await FaceApiService.getVideo();
       //stream?.getTracks()[0];
@@ -79,21 +74,6 @@ export default defineComponent({
       const context = canvas.getContext('2d');
       context?.clearRect(0, 0, canvas.width, canvas.height);
     },
-    getExpressionName: function(detection: DetectionResult) {
-      if(!detection?.expressions) {
-        return null;
-      }
-      const res = Object.entries(detection.expressions).reduce((max, [key, value]) => {
-        return value > max.value ? { key, value } : max;
-      }, { key: 'neutral', value: 0 });
-      return res.key;
-    },
-    detectFace: async function(videoRef: HTMLVideoElement) {
-      return await detectSingleFace(videoRef, new TinyFaceDetectorOptions())
-          .withFaceLandmarks()
-          .withFaceExpressions()
-          .withFaceDescriptor();
-    },
     printLandmarks: async function(detection: DetectionResult, canvasRef: HTMLCanvasElement) {
       // console.log(detection?.expressions)
       this.clearCanvas(canvasRef);
@@ -101,12 +81,9 @@ export default defineComponent({
         draw.drawDetections(canvasRef, detection);
       }
     },
-    expressionChanged(expression: string) {
-      this.$emit('expressionChanged', { expression })
+    expressionChanged(expression: FaceExpression) {
+      this.$emit('expressionChanged', { expression });
     }
-  },
-  data: function() {
-    return {};
   },
   emits: ['expressionChanged']
 });
