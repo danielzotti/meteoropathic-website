@@ -1,5 +1,9 @@
 <template>
-  <WebcamVideo @expressionChanged="onFaceExpressionChange"/>
+  <WebcamVideo
+      :show-buttons="false"
+      :show-landmarks="false"
+      :show-video="false"
+      @expressionChanged="onFaceExpressionChange"/>
   <Meteo :meteo-class="meteoClass"/>
   <div class="expression">{{ expression }}</div>
 </template>
@@ -67,7 +71,7 @@ html, body {
   font-weight: bold;
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   font-size: 20px;
   text-transform: uppercase;
 }

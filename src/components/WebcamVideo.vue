@@ -14,9 +14,14 @@
 
 
     <div class="buttons">
-      <button @click="stop">Stop</button>
-      <button @click="play">Play</button>
-      <button @click="clearCanvas">Clear canvas</button>
+      <button @click="toggleShowButtons">⚙</button>
+      <!--      <button @click="toggleButtons">{{ isButtonsVisible ? 'hide' : 'show' }}</button>-->
+      <span v-if="isButtonsVisible">
+        <button @click="stop">Stop video</button>
+        <button @click="play">Play video</button>
+        <button @click="toggleShowLandmarks">{{ isLandmarksVisible ? 'hide' : 'show' }} landmarks</button>
+        <button @click="toggleShowVideo">{{ isVideoVisible ? 'hide' : 'show' }} video</button>
+      </span>
     </div>
   </div>
 
@@ -26,13 +31,19 @@
 import { defineComponent } from 'vue';
 import { draw } from 'face-api.js';
 import FaceApiService from '@/services/FaceApiService';
-import { debounceTime, distinctUntilChanged, filter, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { interval, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { DetectionResult, FaceExpression } from '@/models/face-api.models';
 
 
 export default defineComponent({
   name: 'WebcamVideo',
+  data() {
+    return {
+      isButtonsVisible: this.showButtons,
+      isVideoVisible: this.showVideo,
+      isLandmarksVisible: this.showLandmarks
+    };
+  },
   props: {
     width: { type: Number, default: 72 * 2 },
     height: { type: Number, default: 56 * 2 },
@@ -44,7 +55,7 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    showDebug: {
+    showLandmarks: {
       type: Boolean,
       default: false
     }
@@ -53,15 +64,24 @@ export default defineComponent({
     await this.play();
   },
   computed: {
-    styleObject(): { width: string, height: string, display: string } {
+    styleObject(): { width: string, height: string, opacity: string } {
       return {
         width: `${ this.width }px`,
         height: `${ this.height }px`,
-        display: this.showVideo ? 'block' : 'none'
+        opacity: this.isVideoVisible ? '1' : '0'
       };
     }
   },
   methods: {
+    toggleShowButtons: function() {
+      this.isButtonsVisible = !this.isButtonsVisible;
+    },
+    toggleShowVideo: function() {
+      this.isVideoVisible = !this.isVideoVisible;
+    },
+    toggleShowLandmarks: function() {
+      this.isLandmarksVisible = !this.isLandmarksVisible;
+    },
     play: async function() {
       console.debug('Start playing...');
       const videoRef = this.$refs.video as HTMLVideoElement;
@@ -84,9 +104,11 @@ export default defineComponent({
       //     tap(detection => this.printLandmarks(detection, canvasRef))
       // ).subscribe();
 
-      expressionDetection$.pipe(
-          tap(detection => this.printLandmarks(detection, canvasRef))
-      ).subscribe()
+      if(this.showLandmarks) {
+        expressionDetection$.pipe(
+            tap(detection => this.printLandmarks(detection, canvasRef))
+        ).subscribe();
+      }
 
       // Manage expression
       expressionDetection$.pipe(
@@ -152,7 +174,7 @@ video, canvas {
 
 .buttons {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   z-index: 1000;
 }

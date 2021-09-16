@@ -12,13 +12,12 @@
 // import Cloud from './Cloud.vue';
 
 import { defineComponent } from 'vue';
-import { MeteoClass } from '@/models/meteo.models';
 
 export default defineComponent({
   name: 'Meteo',
   // components: { Cloud },
   props: {
-    meteoClass: String as MeteoClass
+    meteoClass: String
   }
 });
 </script>
