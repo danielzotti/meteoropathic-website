@@ -29,14 +29,17 @@ export default class FaceApiService {
     await loadTinyFaceDetectorModel(MODEL_URL);
   }
 
-  static async getVideo(constraints = {
-    audio: false,
-    video: {
-      width: { max: 1280 },
-      height: { max: 720 }
-    }
-  }): Promise<MediaStream | null> {
-
+  static async getVideo(videoSize = {
+                          maxWidth: 1280,
+                          maxHeight: 720
+                        }): Promise<MediaStream | null> {
+    const constraints = {
+      audio: false,
+      video: {
+        width: { max: videoSize.maxWidth },
+        height: { max: videoSize.maxHeight }
+      }
+    };
     try {
       return await navigator.mediaDevices.getUserMedia(constraints);
     } catch(err) {

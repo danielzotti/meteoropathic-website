@@ -26,7 +26,7 @@
 import { defineComponent } from 'vue';
 import { draw } from 'face-api.js';
 import FaceApiService, { DetectionResult, FaceExpression } from '@/services/FaceApiService';
-import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 
 
 export default defineComponent({
@@ -34,17 +34,28 @@ export default defineComponent({
   props: {
     width: { type: Number, default: 72 * 2 },
     height: { type: Number, default: 56 * 2 },
+    showVideo: {
+      type: Boolean,
+      default: true
+    },
+    showButtons: {
+      type: Boolean,
+      default: false
+    },
+    showDebug: {
+      type: Boolean,
+      default: false
+    }
   },
   mounted: async function() {
-    console.debug('Starting webcam...');
     await this.play();
-    console.debug('Webcam started');
   },
   computed: {
-    styleObject(): { width: string, height: string } {
+    styleObject(): { width: string, height: string, display: string } {
       return {
         width: `${ this.width }px`,
         height: `${ this.height }px`,
+        display: this.showVideo ? 'block' : 'none'
       };
     }
   },
@@ -55,7 +66,7 @@ export default defineComponent({
       const canvasRef = this.$refs.canvas as HTMLCanvasElement;
       await FaceApiService.init();
 
-      videoRef.srcObject = await FaceApiService.getVideo();
+      videoRef.srcObject = await FaceApiService.getVideo({ maxWidth: this.width, maxHeight: this.height });
 
       const refreshMs = 100;
       const debounceMs = 1000;
@@ -68,6 +79,7 @@ export default defineComponent({
 
       // Manage expression
       expressionDetection$.pipe(
+          filter(detection => !!detection),
           map(detection => detection ? FaceApiService.getExpressionName(detection) : null),
           distinctUntilChanged(),
           debounceTime(debounceMs),
@@ -82,11 +94,10 @@ export default defineComponent({
     },
     clearCanvas: function() {
       const canvas = this.$refs.canvas as HTMLCanvasElement;
-      const context = canvas.getContext('2d');
+      const context = canvas?.getContext('2d');
       context?.clearRect(0, 0, canvas.width, canvas.height);
     },
     printLandmarks: async function(detection: DetectionResult, canvasRef: HTMLCanvasElement) {
-      // console.log(detection?.expressions)
       this.clearCanvas();
       if(detection) {
         draw.drawDetections(canvasRef, detection);
@@ -103,22 +114,22 @@ export default defineComponent({
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .container {
+  position: absolute;
   display: block;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
 }
 
 .video-container {
   position: absolute;
   bottom: 0;
   right: 0;
-  z-index: 1000;
   border: 1px solid black;
   border-radius: 4px;
   overflow: hidden;
+  z-index: 1000;
 }
 
 video, canvas {
@@ -132,5 +143,6 @@ video, canvas {
   position: absolute;
   bottom: 0;
   left: 0;
+  z-index: 1000;
 }
 </style>
