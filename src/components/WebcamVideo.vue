@@ -166,20 +166,20 @@ export default defineComponent({
   position: absolute;
   bottom: 0;
   right: 0;
-  border: 1px solid black;
-  border-radius: 4px;
-  overflow: hidden;
+  //border: 1px solid black;
+  //border-radius: 4px;
+  //overflow: hidden;
   z-index: 1000;
-  background-color: #444;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:before {
-    content: 'video stopped';
-    display: inline-block;
-    margin: auto;
-  }
+  //background-color: #444;
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
+  //
+  //&:before {
+  //  content: 'video stopped';
+  //  display: inline-block;
+  //  margin: auto;
+  //}
 }
 
 video, canvas {

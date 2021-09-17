@@ -7,5 +7,5 @@ The website's background depends on your mood!
 
 ## Thanks to
 - [FaceApi.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)
-- Vue3
-- RxJs
+- [Vue3](https://v3.vuejs.org/)
+- [RxJs](https://rxjs.dev/guide/overviewß)
