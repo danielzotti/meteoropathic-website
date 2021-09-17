@@ -1,24 +1,11 @@
 # meteoropathic-website
+It's a project based on `FaceApi.js` library.
+The website's background depends on your mood!
 
-## Project setup
-```
-npm install
-```
+## Demo
+- [Demo](http://meteoropathic-website.danielzotti.it/)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Thanks to
+- [FaceApi.js](https://justadudewhohacks.github.io/face-api.js/docs/index.html)
+- Vue3
+- RxJs
