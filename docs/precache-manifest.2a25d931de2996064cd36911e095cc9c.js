@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "164687ab8c6b1a21aeca",
-    "url": "/css/app.943b3b7a.css"
+    "revision": "176fe8529c305edf51da",
+    "url": "/css/app.27ce4ceb.css"
   },
   {
     "revision": "ca764241d65927dc4e3133a638a55520",
@@ -28,12 +28,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/meteo/sunset.jpg"
   },
   {
-    "revision": "ccae97a03ddfab1f1d0eb7d965fd1b25",
+    "revision": "eae5ab1553e9312b5f9e29fa3c7b3b66",
     "url": "/index.html"
   },
   {
-    "revision": "164687ab8c6b1a21aeca",
-    "url": "/js/app.eabfa14e.js"
+    "revision": "176fe8529c305edf51da",
+    "url": "/js/app.4e16bd26.js"
   },
   {
     "revision": "441ff5625a48c8acca62",
