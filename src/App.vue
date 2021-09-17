@@ -2,7 +2,7 @@
   <WebcamVideo
       :show-buttons="false"
       :show-landmarks="false"
-      :show-video="false"
+      :show-video="true"
       @expressionChanged="onFaceExpressionChange"/>
   <Meteo :meteo-class="meteoClass"/>
   <div class="expression">{{ expression }}</div>
@@ -41,6 +41,12 @@ export default defineComponent({
         case 'sad':
           this.meteoClass = 'rain';
           break;
+        case 'disgusted':
+          this.meteoClass = 'pollution';
+          break;
+        case 'surprised':
+          this.meteoClass = 'sunset';
+          break;
         default:
           this.meteoClass = 'cloudy';
       }
@@ -51,6 +57,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Italianno&display=swap');
+
 html, body {
   margin: 0;
   padding: 0;
@@ -61,6 +69,7 @@ html, body {
   left: 0;
   right: 0;
   bottom: 0;
+  font-family: Italianno, sans-serif;
 }
 
 *, *:before, *:after {
@@ -69,10 +78,13 @@ html, body {
 
 .expression {
   font-weight: bold;
-  position: fixed;
-  top: 0;
-  right: 0;
-  font-size: 20px;
-  text-transform: uppercase;
+  font-size: 10vw;
+  text-shadow: 1vw 1vw 1vw black;
+  color: white;
+  text-transform: capitalize;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

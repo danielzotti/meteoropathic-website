@@ -15,12 +15,10 @@
 
     <div class="buttons">
       <button @click="toggleShowButtons">⚙</button>
-      <!--      <button @click="toggleButtons">{{ isButtonsVisible ? 'hide' : 'show' }}</button>-->
       <span v-if="isButtonsVisible">
-        <button @click="stop">Stop video</button>
-        <button @click="play">Play video</button>
-        <button @click="toggleShowLandmarks">{{ isLandmarksVisible ? 'hide' : 'show' }} landmarks</button>
+        <button @click="togglePlayVideo">{{ isPlaying ? 'stop' : 'play' }} video</button>
         <button @click="toggleShowVideo">{{ isVideoVisible ? 'hide' : 'show' }} video</button>
+        <button @click="toggleShowLandmarks">{{ isLandmarksVisible ? 'hide' : 'show' }} landmarks</button>
       </span>
     </div>
   </div>
@@ -41,7 +39,8 @@ export default defineComponent({
     return {
       isButtonsVisible: this.showButtons,
       isVideoVisible: this.showVideo,
-      isLandmarksVisible: this.showLandmarks
+      isLandmarksVisible: this.showLandmarks,
+      isPlaying: true
     };
   },
   props: {
@@ -73,6 +72,9 @@ export default defineComponent({
     }
   },
   methods: {
+    togglePlayVideo: function() {
+      this.isPlaying ? this.stop() : this.play();
+    },
     toggleShowButtons: function() {
       this.isButtonsVisible = !this.isButtonsVisible;
     },
@@ -81,9 +83,13 @@ export default defineComponent({
     },
     toggleShowLandmarks: function() {
       this.isLandmarksVisible = !this.isLandmarksVisible;
+      if(!this.isLandmarksVisible) {
+        this.clearCanvas();
+      }
     },
     play: async function() {
       console.debug('Start playing...');
+      this.isPlaying = true;
       const videoRef = this.$refs.video as HTMLVideoElement;
       const canvasRef = this.$refs.canvas as HTMLCanvasElement;
       await FaceApiService.init();
@@ -104,11 +110,11 @@ export default defineComponent({
       //     tap(detection => this.printLandmarks(detection, canvasRef))
       // ).subscribe();
 
-      if(this.showLandmarks) {
-        expressionDetection$.pipe(
-            tap(detection => this.printLandmarks(detection, canvasRef))
-        ).subscribe();
-      }
+      expressionDetection$.pipe(
+          filter(_ => !!this.isLandmarksVisible),
+          tap(detection => this.printLandmarks(detection, canvasRef))
+      ).subscribe();
+
 
       // Manage expression
       expressionDetection$.pipe(
@@ -116,7 +122,7 @@ export default defineComponent({
           map(detection => detection ? FaceApiService.getExpressionName(detection) : null),
           distinctUntilChanged(),
           debounceTime(debounceMs),
-          tap(expression => console.debug({ expression }))
+          // tap(expression => console.debug({ expression }))
       ).subscribe(expression => this.expressionChanged(expression));
       console.debug('Started');
     },
@@ -124,6 +130,7 @@ export default defineComponent({
       console.debug('stop');
       const videoRef = this.$refs.video as HTMLVideoElement;
       videoRef.srcObject = null;
+      this.isPlaying = false;
     },
     clearCanvas: function() {
       const canvas = this.$refs.canvas as HTMLCanvasElement;
@@ -163,6 +170,16 @@ export default defineComponent({
   border-radius: 4px;
   overflow: hidden;
   z-index: 1000;
+  background-color: #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:before {
+    content: 'video stopped';
+    display: inline-block;
+    margin: auto;
+  }
 }
 
 video, canvas {

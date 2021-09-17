@@ -1,21 +1,12 @@
 <template>
-  <div class="meteo-container" :class="meteoClass">
-    <h1>{{ meteoClass }}</h1>
-    <!--    <Cloud :seed="8517" :top="10" :left="10"></Cloud>-->
-    <!--    <Cloud :seed="1234" :top="50" :left="50"></Cloud>-->
-    <!--    <Cloud :seed="100" :top="80" :left="70"></Cloud>-->
-  </div>
-
+  <div class="meteo-container" :class="meteoClass"></div>
 </template>
 
 <script lang="ts">
-// import Cloud from './Cloud.vue';
-
 import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Meteo',
-  // components: { Cloud },
   props: {
     meteoClass: String
   }
@@ -32,28 +23,32 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.5s ease-in-out;
 
-  h1 {
-    text-align: center;
-    text-transform: uppercase;
-    margin: 0;
+  &.sunset {
+    background-image: url('/img/meteo/sunset.jpg')
   }
 
   &.sun {
-    background-color: yellow;
+    background-image: url('/img/meteo/sun.jpg')
   }
 
   &.cloudy {
-    background-color: lightgray;
+    background-image: url('/img/meteo/cloudy.jpg')
   }
 
   &.rain {
-    background-color: gray;
+    background-image: url('/img/meteo/rain.jpg')
   }
 
   &.storm {
-    // background-color: black;
-    background-color: red;
+    background-image: url('/img/meteo/storm.jpg')
+  }
+
+  &.pollution {
+    background-image: url('/img/meteo/pollution.jpg')
   }
 }
 
