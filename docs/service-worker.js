@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.05413269cfbf111a73a5b2a0aa55a0e5.js"
+  "/precache-manifest.6a9dca94481f264bc00ba691f7b2bbb8.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "meteoropathic-website"});

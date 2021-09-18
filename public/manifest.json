@@ -9,12 +9,12 @@
       "type": "image/png"
     },
     {
-      "src": "./img/icons/meteo-icon_512x51.png",
+      "src": "./img/icons/meteo-icon_512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "./img/icons/android-chrome-maskable-32x32.png",
+      "src": "./img/icons/meteo-icon_32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     }

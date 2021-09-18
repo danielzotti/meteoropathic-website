@@ -4,27 +4,27 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/app.27ce4ceb.css"
   },
   {
-    "revision": "ca764241d65927dc4e3133a638a55520",
+    "revision": "c1ac0d71f71874da26ac1a6886983b30",
     "url": "/img/meteo/cloudy.jpg"
   },
   {
-    "revision": "78a47f9c5fb0d54946bad412de05185c",
+    "revision": "4c0f726c7e7c34a5d8b611c61ee88010",
     "url": "/img/meteo/pollution.jpg"
   },
   {
-    "revision": "603efe3f4512f056d9827aec480587b7",
+    "revision": "65d78b6f42ebf4a7556fcf12bdafc16e",
     "url": "/img/meteo/rain.jpg"
   },
   {
-    "revision": "c29e475670a69c5d22afd1dd5dbbee82",
+    "revision": "a95c4d4440fef462268e380f9f095c3c",
     "url": "/img/meteo/storm.jpg"
   },
   {
-    "revision": "271c44a3d7bc51b12c86f368a7035c5d",
+    "revision": "d378446ea5e65dcc744e137cc0f0bcfc",
     "url": "/img/meteo/sun.jpg"
   },
   {
-    "revision": "b589e007f8aa6b758dec98dcf1256150",
+    "revision": "031e3f17b0d9a74d0e90ae425bb4ee03",
     "url": "/img/meteo/sunset.jpg"
   },
   {
@@ -40,7 +40,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors.9769adf7.js"
   },
   {
-    "revision": "165ce3cb2c724d0dc5b72cb027adabad",
+    "revision": "20b78d1829c936f9030df573be824cff",
     "url": "/manifest.json"
   },
   {
