@@ -19,6 +19,7 @@
         <button @click="togglePlayVideo">{{ isPlaying ? 'stop' : 'play' }} video</button>
         <button @click="toggleShowVideo">{{ isVideoVisible ? 'hide' : 'show' }} video</button>
         <button @click="toggleShowLandmarks">{{ isLandmarksVisible ? 'hide' : 'show' }} landmarks</button>
+        <span class="percentage">{{ expression?.percentage?.toFixed(2) || 0 }}%</span>
       </span>
     </div>
   </div>
@@ -30,7 +31,7 @@ import { defineComponent } from 'vue';
 import { draw } from 'face-api.js';
 import FaceApiService from '@/services/FaceApiService';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { DetectionResult, FaceExpression } from '@/models/face-api.models';
+import { DetectionResult, FaceExpressionResult } from '@/models/face-api.models';
 
 
 export default defineComponent({
@@ -42,7 +43,8 @@ export default defineComponent({
       isLandmarksVisible: this.showLandmarks,
       isPlaying: true,
       width: this.maxVideoWidth,
-      height: this.maxVideoHeight
+      height: this.maxVideoHeight,
+      expression: null as FaceExpressionResult | null
     };
   },
   props: {
@@ -106,8 +108,8 @@ export default defineComponent({
       this.width = videoSettings?.width || this.maxVideoWidth;
       this.height = videoSettings?.height || this.maxVideoHeight;
 
-      const refreshMs = 100;
-      const debounceMs = 250;
+      const refreshMs = 200;
+      const debounceMs = 350;
 
       // Try to detect expression every tot time
       const expressionDetection$ = FaceApiService.getExpressionDetection({ videoRef, refreshMs });
@@ -129,10 +131,9 @@ export default defineComponent({
       // Manage expression
       expressionDetection$.pipe(
           filter(detection => !!detection),
-          map(detection => detection ? FaceApiService.getExpressionName(detection) : null),
-          distinctUntilChanged(),
+          map(detection => FaceApiService.getExpression(detection)),
+          distinctUntilChanged((previous: FaceExpressionResult, current: FaceExpressionResult) => previous.name === current.name),
           debounceTime(debounceMs),
-          // tap(expression => console.debug({ expression }))
       ).subscribe(expression => this.expressionChanged(expression));
       console.debug('Started');
     },
@@ -153,7 +154,8 @@ export default defineComponent({
         draw.drawDetections(canvasRef, detection);
       }
     },
-    expressionChanged(expression: FaceExpression) {
+    expressionChanged(expression: FaceExpressionResult) {
+      this.expression = expression;
       this.$emit('expressionChanged', expression);
     }
   },
@@ -176,10 +178,10 @@ export default defineComponent({
   position: absolute;
   bottom: 0;
   right: 0;
+  z-index: 1000;
   //border: 1px solid black;
   //border-radius: 4px;
   //overflow: hidden;
-  z-index: 1000;
   //background-color: #444;
   //display: flex;
   //justify-content: center;
@@ -204,5 +206,19 @@ video, canvas {
   top: 0;
   left: 0;
   z-index: 1000;
+  vertical-align: middle;
+
+  button,
+  .percentage {
+    display: inline-block;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 3px 5px;
+    line-height: 1;
+    font-size: 12px;
+    font-family: sans-serif;
+  }
 }
+
 </style>

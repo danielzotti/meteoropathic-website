@@ -4,8 +4,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "60cfa778dbce2e634620",
-    "url": "/css/app.51dbc6e1.css"
+    "revision": "04e8dfcc60e5a6e80b44",
+    "url": "/css/app.c325699d.css"
   },
   {
     "revision": "c1ac0d71f71874da26ac1a6886983b30",
@@ -14,6 +14,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "c1ac0d71f71874da26ac1a6886983b30",
     "url": "/img/meteo/cloudy.jpg"
+  },
+  {
+    "revision": "6e0269f4114b60a07b93be08c9aa1b1e",
+    "url": "/img/meteo/fearful.jpg"
   },
   {
     "revision": "4c0f726c7e7c34a5d8b611c61ee88010",
@@ -56,16 +60,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/sunset.031e3f17.jpg"
   },
   {
-    "revision": "08bb0485cf423d50da387b041000bf74",
+    "revision": "a77642a3812c194115a593c91d956ecc",
     "url": "/index.html"
   },
   {
-    "revision": "60cfa778dbce2e634620",
-    "url": "/js/app.b3527ac7.js"
+    "revision": "04e8dfcc60e5a6e80b44",
+    "url": "/js/app.dd0887ec.js"
   },
   {
-    "revision": "441ff5625a48c8acca62",
-    "url": "/js/chunk-vendors.9769adf7.js"
+    "revision": "9f76136bc9af7338e5d8",
+    "url": "/js/chunk-vendors.48405c98.js"
   },
   {
     "revision": "20b78d1829c936f9030df573be824cff",

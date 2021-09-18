@@ -5,4 +5,14 @@ export type DetectionResult =
   | undefined;
 
 
-export type FaceExpression = 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'disgusted' | 'surprised' | null;
+export type FaceExpressions = 'neutral' | 'happy' | 'sad' | 'angry' | 'fearful' | 'disgusted' | 'surprised' | null;
+
+export interface FaceExpressionResult {
+  name: FaceExpressions;
+  percentage: number;
+}
+
+export type FaceExpressionResultWithOthers = FaceExpressionResult & {
+  others: Array<FaceExpressionResult>
+}
+

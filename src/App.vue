@@ -15,7 +15,7 @@ import { defineComponent } from 'vue';
 import WebcamVideo from './components/WebcamVideo.vue';
 import Meteo from './components/meteo/Meteo.vue';
 import { MeteoClass } from '@/models/meteo.models';
-import { FaceExpression } from '@/models/face-api.models';
+import { FaceExpressions, FaceExpressionResult } from '@/models/face-api.models';
 
 export default defineComponent({
   name: 'App',
@@ -26,14 +26,18 @@ export default defineComponent({
   data() {
     return {
       meteoClass: 'cloudy' as MeteoClass,
-      expression: 'neutral' as FaceExpression,
+      expression: 'neutral' as FaceExpressions,
+      percentage: 0,
     };
   },
   methods: {
-    onFaceExpressionChange(expression: FaceExpression) {
-      this.expression = expression;
-      console.debug({ currentExpression: expression });
-      switch(expression) {
+    onFaceExpressionChange(expression: FaceExpressionResult) {
+      console.debug(expression);
+
+      this.expression = expression.name;
+      this.percentage = expression.percentage;
+
+      switch(expression.name) {
         case 'happy':
           this.meteoClass = 'sun';
           break;
@@ -49,6 +53,10 @@ export default defineComponent({
         case 'surprised':
           this.meteoClass = 'sunset';
           break;
+        case 'fearful':
+          this.meteoClass = 'fearful';
+          break;
+        case 'neutral':
         default:
           this.meteoClass = 'cloudy';
       }
@@ -81,7 +89,9 @@ html, body {
 
 .expression {
   font-weight: bold;
-  text-shadow: 1vw 1vw 1vw black;
+  text-shadow: 0.5vw 0.5vw 0.5vw black,
+               0.1vw 0.5vw 0.5vw black,
+               -0.2vw 0.7vw 0.5vw black;
   color: white;
   text-transform: capitalize;
   position: absolute;
@@ -89,7 +99,7 @@ html, body {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 20vw;
-  @media(min-width:600px){
+  @media(min-width: 600px) {
     font-size: 10vw;
   }
 }

@@ -31,6 +31,10 @@ export default defineComponent({
     background-image: url('/img/meteo/sunset.jpg')
   }
 
+  &.fearful {
+    background-image: url('/img/meteo/fearful.jpg')
+  }
+
   &.sun {
     background-image: url('/img/meteo/sun.jpg')
   }

@@ -9,7 +9,7 @@ import {
 } from 'face-api.js';
 import { combineLatest, fromEvent, interval, Observable } from 'rxjs';
 import { concatMap, filter } from 'rxjs/operators';
-import { DetectionResult, FaceExpression } from '@/models/face-api.models';
+import { DetectionResult, FaceExpressions, FaceExpressionResult } from '@/models/face-api.models';
 
 export default class FaceApiService {
 
@@ -38,7 +38,7 @@ export default class FaceApiService {
       return await navigator.mediaDevices.getUserMedia(constraints);
     } catch(err) {
       console.log(err);
-      alert('This website works only with a webcam. Please grant video permission.')
+      alert('This website works only with a webcam. Please grant video permission.');
     }
     return null;
   }
@@ -53,7 +53,6 @@ export default class FaceApiService {
     // Try to detect expression every tot time
     return combineLatest([refreshTimer$, video$]).pipe(
       concatMap(([,]) => this.detectFace(videoRef)),
-      // tap(console.log),
       filter(i => !!i)
     );
   }
@@ -65,14 +64,21 @@ export default class FaceApiService {
       .withFaceDescriptor();
   }
 
-  static getExpressionName(detection: DetectionResult): FaceExpression {
+  static getExpression(detection: DetectionResult): FaceExpressionResult {
     if(!detection?.expressions) {
-      return null;
+      return {
+        name: null,
+        percentage: 0,
+      };
     }
     const res = Object.entries(detection.expressions).reduce((max, [key, value]) => {
       return value > max.value ? { key, value } : max;
     }, { key: 'neutral', value: 0 });
-    return res.key as FaceExpression;
+    return { name: res.key as FaceExpressions, percentage: res.value };
+  }
+
+  static getExpressionName(detection: DetectionResult): FaceExpressions {
+    return this.getExpression(detection)?.name;
   }
 
 }

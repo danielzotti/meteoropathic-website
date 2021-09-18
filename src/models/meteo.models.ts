@@ -1,1 +1,1 @@
-export type MeteoClass = 'sun' | 'cloudy' | 'rain' | 'storm' | 'sunset' | 'pollution';
+export type MeteoClass = 'sun' | 'cloudy' | 'rain' | 'storm' | 'sunset' | 'pollution' | 'fearful';
