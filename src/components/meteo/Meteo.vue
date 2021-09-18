@@ -1,5 +1,15 @@
 <template>
   <div class="meteo-container" :class="meteoClass"></div>
+  <!-- This is a trick to fix a problem in mobile -->
+  <div class="preload-images">
+    <img src="/img/meteo/sunset.jpg" style="display:none;"/>
+    <img src="/img/meteo/fearful.jpg" style="display:none;"/>
+    <img src="/img/meteo/sun.jpg" style="display:none;"/>
+    <img src="/img/meteo/cloudy.jpg" style="display:none;"/>
+    <img src="/img/meteo/rain.jpg" style="display:none;"/>
+    <img src="/img/meteo/storm.jpg" style="display:none;"/>
+    <img src="/img/meteo/pollution.jpg" style="display:none;"/>
+  </div>
 </template>
 
 <script lang="ts">
@@ -53,6 +63,18 @@ export default defineComponent({
 
   &.pollution {
     background-image: url('/img/meteo/pollution.jpg')
+  }
+
+  .preload-images {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    display: none;
+    position: absolute;
+
+    img {
+      display: none;
+    }
   }
 }
 
