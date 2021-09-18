@@ -3,6 +3,8 @@
       :show-buttons="false"
       :show-landmarks="false"
       :show-video="true"
+      :maxVideoWidth="300"
+      :maxVideoHeight="300"
       @expressionChanged="onFaceExpressionChange"/>
   <Meteo :meteo-class="meteoClass"/>
   <div class="expression">{{ expression }}</div>

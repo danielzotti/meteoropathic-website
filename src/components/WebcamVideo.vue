@@ -40,12 +40,14 @@ export default defineComponent({
       isButtonsVisible: this.showButtons,
       isVideoVisible: this.showVideo,
       isLandmarksVisible: this.showLandmarks,
-      isPlaying: true
+      isPlaying: true,
+      width: this.maxVideoWidth,
+      height: this.maxVideoHeight
     };
   },
   props: {
-    width: { type: Number, default: 72 * 2 },
-    height: { type: Number, default: 56 * 2 },
+    maxVideoWidth: { type: Number, default: 600 },
+    maxVideoHeight: { type: Number, default: 600 },
     showVideo: {
       type: Boolean,
       default: true
@@ -94,10 +96,18 @@ export default defineComponent({
       const canvasRef = this.$refs.canvas as HTMLCanvasElement;
       await FaceApiService.init();
 
-      videoRef.srcObject = await FaceApiService.getVideo({ maxWidth: this.width, maxHeight: this.height });
+      videoRef.srcObject = await FaceApiService.getVideo({
+        maxWidth: this.maxVideoWidth,
+        maxHeight: this.maxVideoHeight
+      });
+
+      const videoSettings = videoRef.srcObject?.getVideoTracks()[0]?.getSettings();
+
+      this.width = videoSettings?.width || this.maxVideoWidth;
+      this.height = videoSettings?.height || this.maxVideoHeight;
 
       const refreshMs = 100;
-      const debounceMs = 1000;
+      const debounceMs = 250;
 
       // Try to detect expression every tot time
       const expressionDetection$ = FaceApiService.getExpressionDetection({ videoRef, refreshMs });
@@ -111,7 +121,7 @@ export default defineComponent({
       // ).subscribe();
 
       expressionDetection$.pipe(
-          filter(_ => !!this.isLandmarksVisible),
+          filter(() => !!this.isLandmarksVisible),
           tap(detection => this.printLandmarks(detection, canvasRef))
       ).subscribe();
 
@@ -134,8 +144,8 @@ export default defineComponent({
     },
     clearCanvas: function() {
       const canvas = this.$refs.canvas as HTMLCanvasElement;
-      const context = canvas.getContext('2d');
-      context?.clearRect(0, 0, canvas.width, canvas.height);
+      const context = canvas?.getContext('2d');
+      context?.clearRect(0, 0, canvas?.width, canvas?.height);
     },
     printLandmarks: async function(detection: DetectionResult, canvasRef: HTMLCanvasElement) {
       this.clearCanvas();

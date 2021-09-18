@@ -24,9 +24,9 @@ export default class FaceApiService {
   }
 
   static async getVideo(videoSize = {
-                          maxWidth: 1280,
-                          maxHeight: 720
-                        }): Promise<MediaStream | null> {
+    maxWidth: 1280,
+    maxHeight: 720
+  }): Promise<MediaStream | null> {
     const constraints = {
       audio: false,
       video: {
@@ -38,6 +38,7 @@ export default class FaceApiService {
       return await navigator.mediaDevices.getUserMedia(constraints);
     } catch(err) {
       console.log(err);
+      alert('This website works only with a webcam. Please grant video permission.')
     }
     return null;
   }
@@ -51,7 +52,7 @@ export default class FaceApiService {
 
     // Try to detect expression every tot time
     return combineLatest([refreshTimer$, video$]).pipe(
-      concatMap(([time, video]) => this.detectFace(videoRef)),
+      concatMap(([,]) => this.detectFace(videoRef)),
       // tap(console.log),
       filter(i => !!i)
     );
