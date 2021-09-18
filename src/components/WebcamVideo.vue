@@ -50,6 +50,7 @@ export default defineComponent({
   props: {
     maxVideoWidth: { type: Number, default: 600 },
     maxVideoHeight: { type: Number, default: 600 },
+    percentageThreshold: { type: Number, default: 0.9 },
     showVideo: {
       type: Boolean,
       default: true
@@ -108,20 +109,13 @@ export default defineComponent({
       this.width = videoSettings?.width || this.maxVideoWidth;
       this.height = videoSettings?.height || this.maxVideoHeight;
 
-      const refreshMs = 200;
+      const refreshMs = 100;
       const debounceMs = 350;
 
       // Try to detect expression every tot time
       const expressionDetection$ = FaceApiService.getExpressionDetection({ videoRef, refreshMs });
 
       // Print on canvas
-      // interval(1000).pipe(
-      //     withLatestFrom(expressionDetection$),
-      //     switchMap( ([, detection]) => of(detection)),
-      //     tap(r => console.warn({1: r})),
-      //     tap(detection => this.printLandmarks(detection, canvasRef))
-      // ).subscribe();
-
       expressionDetection$.pipe(
           filter(() => !!this.isLandmarksVisible),
           tap(detection => this.printLandmarks(detection, canvasRef))
@@ -131,8 +125,9 @@ export default defineComponent({
       // Manage expression
       expressionDetection$.pipe(
           filter(detection => !!detection),
-          map(detection => FaceApiService.getExpression(detection)),
-          distinctUntilChanged((previous: FaceExpressionResult, current: FaceExpressionResult) => previous.name === current.name),
+          map((detection: DetectionResult) => FaceApiService.getExpression(detection, this.percentageThreshold)),
+          filter(detection => !!detection),
+          distinctUntilChanged((previous: FaceExpressionResult, current: FaceExpressionResult) => previous?.name === current?.name),
           debounceTime(debounceMs),
       ).subscribe(expression => this.expressionChanged(expression));
       console.debug('Started');
@@ -178,6 +173,8 @@ export default defineComponent({
   position: absolute;
   bottom: 0;
   right: 0;
+  left: 0;
+  margin: auto;
   z-index: 1000;
   //border: 1px solid black;
   //border-radius: 4px;

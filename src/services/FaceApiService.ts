@@ -64,21 +64,18 @@ export default class FaceApiService {
       .withFaceDescriptor();
   }
 
-  static getExpression(detection: DetectionResult): FaceExpressionResult {
+  static getExpression(detection: DetectionResult, percentageThreshold = 0.9): FaceExpressionResult {
     if(!detection?.expressions) {
-      return {
-        name: null,
-        percentage: 0,
-      };
+      return null;
     }
     const res = Object.entries(detection.expressions).reduce((max, [key, value]) => {
       return value > max.value ? { key, value } : max;
     }, { key: 'neutral', value: 0 });
-    return { name: res.key as FaceExpressions, percentage: res.value };
+    return res.value > percentageThreshold ? { name: res.key as FaceExpressions, percentage: res.value } : null;
   }
 
-  static getExpressionName(detection: DetectionResult): FaceExpressions {
-    return this.getExpression(detection)?.name;
+  static getExpressionName(detection: DetectionResult, percentageThreshold: number): FaceExpressions {
+    return this.getExpression(detection, percentageThreshold)?.name || null;
   }
 
 }

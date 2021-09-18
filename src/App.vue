@@ -5,6 +5,7 @@
       :show-video="true"
       :maxVideoWidth="300"
       :maxVideoHeight="300"
+      :percentage-threshold="0.9"
       @expressionChanged="onFaceExpressionChange"/>
   <Meteo :meteo-class="meteoClass"/>
   <div class="expression">{{ expression }}</div>
@@ -33,6 +34,9 @@ export default defineComponent({
   methods: {
     onFaceExpressionChange(expression: FaceExpressionResult) {
       console.debug(expression);
+      if(!expression) {
+        return;
+      }
 
       this.expression = expression.name;
       this.percentage = expression.percentage;
@@ -90,8 +94,8 @@ html, body {
 .expression {
   font-weight: bold;
   text-shadow: 0.5vw 0.5vw 0.5vw black,
-               0.1vw 0.5vw 0.5vw black,
-               -0.2vw 0.7vw 0.5vw black;
+  0.1vw 0.5vw 0.5vw black,
+  -0.2vw 0.7vw 0.5vw black;
   color: white;
   text-transform: capitalize;
   position: absolute;
