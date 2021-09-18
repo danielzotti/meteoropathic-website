@@ -32,7 +32,7 @@ export default defineComponent({
   methods: {
     onFaceExpressionChange(expression: FaceExpression) {
       this.expression = expression;
-      console.debug({ expressionInApp: expression });
+      console.debug({ currentExpression: expression });
       switch(expression) {
         case 'happy':
           this.meteoClass = 'sun';
@@ -72,6 +72,7 @@ html, body {
   right: 0;
   bottom: 0;
   font-family: Italianno, sans-serif;
+  background-color: black;
 }
 
 *, *:before, *:after {
@@ -80,7 +81,6 @@ html, body {
 
 .expression {
   font-weight: bold;
-  font-size: 10vw;
   text-shadow: 1vw 1vw 1vw black;
   color: white;
   text-transform: capitalize;
@@ -88,5 +88,9 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: 20vw;
+  @media(min-width:600px){
+    font-size: 10vw;
+  }
 }
 </style>

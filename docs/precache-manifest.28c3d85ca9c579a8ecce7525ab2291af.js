@@ -4,8 +4,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/CNAME"
   },
   {
-    "revision": "1d1fe0a77c1c7b2778b5",
-    "url": "/css/app.940038d2.css"
+    "revision": "60cfa778dbce2e634620",
+    "url": "/css/app.51dbc6e1.css"
+  },
+  {
+    "revision": "c1ac0d71f71874da26ac1a6886983b30",
+    "url": "/img/cloudy.c1ac0d71.jpg"
   },
   {
     "revision": "c1ac0d71f71874da26ac1a6886983b30",
@@ -32,12 +36,32 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/meteo/sunset.jpg"
   },
   {
-    "revision": "c576ed827c2d6ff386f5f80fe2fe3304",
+    "revision": "4c0f726c7e7c34a5d8b611c61ee88010",
+    "url": "/img/pollution.4c0f726c.jpg"
+  },
+  {
+    "revision": "65d78b6f42ebf4a7556fcf12bdafc16e",
+    "url": "/img/rain.65d78b6f.jpg"
+  },
+  {
+    "revision": "a95c4d4440fef462268e380f9f095c3c",
+    "url": "/img/storm.a95c4d44.jpg"
+  },
+  {
+    "revision": "d378446ea5e65dcc744e137cc0f0bcfc",
+    "url": "/img/sun.d378446e.jpg"
+  },
+  {
+    "revision": "031e3f17b0d9a74d0e90ae425bb4ee03",
+    "url": "/img/sunset.031e3f17.jpg"
+  },
+  {
+    "revision": "08bb0485cf423d50da387b041000bf74",
     "url": "/index.html"
   },
   {
-    "revision": "1d1fe0a77c1c7b2778b5",
-    "url": "/js/app.e044113a.js"
+    "revision": "60cfa778dbce2e634620",
+    "url": "/js/app.b3527ac7.js"
   },
   {
     "revision": "441ff5625a48c8acca62",
